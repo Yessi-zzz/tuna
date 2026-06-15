@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>Tuna.SelfTest</RootNamespace>
+    <AssemblyName>Tuna.SelfTest</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Tuna.Core\Tuna.Core.csproj" />
+    <ProjectReference Include="..\..\src\Tuna.Backends.Lenovo\Tuna.Backends.Lenovo.csproj" />
+  </ItemGroup>
+</Project>

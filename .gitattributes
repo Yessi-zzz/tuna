@@ -1,0 +1,5 @@
+# 统一文本换行,二进制文件不转换
+* text=auto eol=crlf
+*.png binary
+*.ico binary
+*.jpg binary
