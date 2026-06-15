@@ -1,0 +1,23 @@
+name: CI
+
+# 每次推送到 main 或提 PR 时,自动在云端 Windows 上编译一遍,
+# 编译不过会在仓库 / PR 上标红,及时发现把代码改坏。
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest   # WPF(net8.0-windows)只能在 Windows 上编译
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 编译解决方案
+        run: dotnet build Tuna.sln -c Release --nologo

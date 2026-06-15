@@ -1,0 +1,39 @@
+name: Release
+
+# 当你推送形如 v0.2.0 的 tag 时,自动在云端编译「独立单文件 exe」并发布 Release。
+# 用法:  git tag v0.2.0  &&  git push origin v0.2.0
+on:
+  push:
+    tags: [ 'v*' ]
+
+permissions:
+  contents: write   # 允许工作流创建 Release / 上传附件
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: 发布独立单文件 exe(内置 .NET,免装运行时)
+        run: >
+          dotnet publish src/Tuna.App/Tuna.App.csproj
+          -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=none
+          -o publish
+
+      - name: 创建 Release 并挂上 Tuna.exe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create ${{ github.ref_name }}
+          publish/Tuna.exe
+          --title "Tuna ${{ github.ref_name }}"
+          --generate-notes
